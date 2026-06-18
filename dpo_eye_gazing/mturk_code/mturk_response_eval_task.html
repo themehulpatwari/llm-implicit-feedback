@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Response Quality Evaluation Task</title>
+<style>
+  :root {
+    --primary: #1a73e8;
+    --primary-dark: #1557b0;
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --border: #dadce0;
+    --text: #202124;
+    --text-muted: #5f6368;
+    --accent: #e8f0fe;
+    --section-head: #1a237e;
+    --radio-active: #1a73e8;
+    --badge-a: #1a73e8;
+    --badge-b: #137333;
+    --badge-a-bg: #e8f0fe;
+    --badge-b-bg: #e6f4ea;
+    --badge-a-border: #a8c5f5;
+    --badge-b-border: #81c995;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Google Sans', 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
+  .page-wrapper { max-width: 980px; margin: 0 auto; padding: 20px 16px 60px; }
+
+  /* Header */
+  .header-banner { background: linear-gradient(135deg, #1a237e 0%, #1a73e8 100%); color: white; padding: 18px 24px; border-radius: 8px 8px 0 0; }
+  .header-banner h1 { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
+  .header-banner p  { font-size: 13px; opacity: 0.9; }
+
+  /* Accordion */
+  .instructions-accordion { background: var(--accent); border: 1.5px solid var(--primary); border-top: none; border-radius: 0 0 8px 8px; margin-bottom: 20px; overflow: hidden; }
+  .accordion-toggle { width: 100%; background: none; border: none; padding: 12px 20px; text-align: left; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--primary-dark); display: flex; align-items: center; gap: 8px; }
+  .accordion-toggle .arrow { transition: transform 0.2s; font-size: 12px; }
+  .accordion-toggle.open .arrow { transform: rotate(90deg); }
+  .accordion-body { display: none; padding: 0 20px 16px; font-size: 13px; color: #333; line-height: 1.7; }
+  .accordion-body.open { display: block; }
+  .accordion-body h3 { font-size: 13px; font-weight: 600; margin: 14px 0 5px; color: var(--section-head); }
+  .accordion-body p  { margin-bottom: 8px; }
+  .accordion-body ul { padding-left: 20px; margin-bottom: 8px; }
+  .accordion-body li { margin-bottom: 4px; }
+
+  /* Example styles inside accordion */
+  .ex-prompt-box { background: white; border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: 6px; padding: 10px 14px; margin: 6px 0 10px; font-size: 12.5px; font-style: italic; color: #333; }
+  .ex-responses { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  @media (max-width: 620px) { .ex-responses { grid-template-columns: 1fr; } }
+  .ex-resp-box { background: white; border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; font-size: 12px; line-height: 1.55; }
+  .ex-resp-box.resp-a { border-top: 3px solid var(--badge-a); }
+  .ex-resp-box.resp-b { border-top: 3px solid var(--badge-b); }
+  .ex-resp-label { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
+  .ex-resp-label.a { color: var(--badge-a); }
+  .ex-resp-label.b { color: var(--badge-b); }
+  .ex-qa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0 4px; }
+  @media (max-width: 620px) { .ex-qa-grid { grid-template-columns: 1fr; } }
+  .ex-qa-col { background: white; border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; font-family: monospace; font-size: 11.5px; white-space: pre-wrap; line-height: 1.6; }
+  .ex-qa-col.col-a { border-top: 3px solid var(--badge-a); }
+  .ex-qa-col.col-b { border-top: 3px solid var(--badge-b); }
+  .ex-compare-box { background: white; border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; font-family: monospace; font-size: 12px; white-space: pre-wrap; margin-top: 8px; }
+
+  /* Notice */
+  .notice-box { background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 4px; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: #5d4037; }
+
+  /* Step labels */
+  .step-label { font-size: 13px; font-weight: 700; color: var(--section-head); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--accent); }
+
+  /* Prompt card */
+  .prompt-card { background: var(--card); border: 1.5px solid var(--primary); border-radius: 8px; margin-bottom: 20px; overflow: hidden; }
+  .prompt-card-header { background: linear-gradient(90deg, #e8f0fe, #f8f9fa); border-bottom: 1px solid var(--badge-a-border); padding: 10px 20px; display: flex; align-items: center; gap: 10px; }
+  .prompt-label-badge { background: var(--primary); color: white; border-radius: 4px; padding: 2px 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
+  .prompt-card-body { padding: 14px 20px; font-size: 14.5px; font-weight: 500; color: var(--text); }
+
+  /* Side-by-side responses */
+  .responses-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; align-items: start; }
+  @media (max-width: 680px) { .responses-grid { grid-template-columns: 1fr; } }
+  .response-display-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.07); }
+  .response-display-card.resp-a { border-top: 3px solid var(--badge-a); }
+  .response-display-card.resp-b { border-top: 3px solid var(--badge-b); }
+  .resp-display-header { padding: 9px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
+  .resp-display-header.a { background: var(--badge-a-bg); }
+  .resp-display-header.b { background: var(--badge-b-bg); }
+  .resp-badge { border-radius: 20px; padding: 2px 12px; font-size: 12px; font-weight: 700; color: white; }
+  .resp-badge.a { background: var(--badge-a); }
+  .resp-badge.b { background: var(--badge-b); }
+  .resp-display-title { font-size: 12.5px; font-weight: 600; }
+  .resp-display-title.a { color: var(--badge-a); }
+  .resp-display-title.b { color: var(--badge-b); }
+  .resp-display-body { padding: 14px 16px; font-size: 13px; line-height: 1.65; color: var(--text); white-space: pre-wrap; word-break: break-word; max-height: 460px; overflow-y: auto; }
+
+  /* Evaluation columns */
+  .eval-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+  @media (max-width: 680px) { .eval-grid { grid-template-columns: 1fr; } }
+  .eval-col { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.07); }
+  .eval-col.col-a { border-top: 3px solid var(--badge-a); }
+  .eval-col.col-b { border-top: 3px solid var(--badge-b); }
+  .eval-col-header { padding: 9px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
+  .eval-col-header.a { background: var(--badge-a-bg); }
+  .eval-col-header.b { background: var(--badge-b-bg); }
+  .eval-col-body { padding: 16px; }
+
+  /* Questions */
+  .question-block { margin-bottom: 20px; }
+  .question-block:last-child { margin-bottom: 0; }
+  .question-label { font-size: 12.5px; font-weight: 600; color: var(--section-head); margin-bottom: 7px; display: flex; align-items: flex-start; gap: 6px; }
+  .question-label .q-num { background: var(--section-head); color: white; border-radius: 3px; padding: 1px 6px; font-size: 10.5px; margin-top: 1px; white-space: nowrap; flex-shrink: 0; }
+  .question-sublabel { font-size: 11.5px; color: var(--text-muted); margin-top: -4px; margin-bottom: 7px; }
+
+  .radio-group { display: flex; flex-wrap: wrap; gap: 7px; }
+  .radio-option { display: flex; align-items: center; gap: 5px; background: #f8f9fa; border: 1.5px solid var(--border); border-radius: 20px; padding: 4px 10px; cursor: pointer; transition: all 0.15s; font-size: 12px; user-select: none; }
+  .radio-option:hover { border-color: var(--primary); background: var(--accent); }
+  .radio-option input[type="radio"] { accent-color: var(--radio-active); width: 13px; height: 13px; cursor: pointer; }
+  .radio-option.selected { border-color: var(--primary); background: var(--accent); color: var(--primary-dark); font-weight: 500; }
+
+  .text-input { width: 100%; padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 12.5px; font-family: inherit; resize: vertical; color: var(--text); transition: border-color 0.15s; background: #fafafa; }
+  .text-input:focus { outline: none; border-color: var(--primary); background: white; }
+  .text-input::placeholder { color: #aaa; }
+  .question-divider { border: none; border-top: 1px solid #ebebeb; margin: 0 0 20px; }
+
+  /* Claim box — the text the worker types as their chosen claim */
+  .claim-box-wrap { position: relative; }
+  .claim-char-hint { font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 3px; }
+
+  /* Comparison card */
+  .comparison-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 28px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.07); }
+  .comparison-header { background: #f1f3f4; padding: 11px 20px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 700; color: var(--section-head); text-transform: uppercase; letter-spacing: 0.06em; }
+  .comparison-body { padding: 18px 20px; }
+
+  /* Submit */
+  .submit-section { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-top: 8px; }
+  .submit-section h3 { font-size: 14px; font-weight: 600; margin-bottom: 10px; color: var(--section-head); }
+  .additional-comments { width: 100%; min-height: 70px; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 13px; font-family: inherit; resize: vertical; margin-bottom: 14px; background: #fafafa; transition: border-color 0.15s; }
+  .additional-comments:focus { outline: none; border-color: var(--primary); background: white; }
+  .submit-btn { background: var(--primary); color: white; border: none; border-radius: 6px; padding: 10px 32px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+  .submit-btn:hover { background: var(--primary-dark); }
+  .validation-msg { display: none; color: #c62828; font-size: 12px; margin-top: 8px; }
+  .field-error { border-color: #c62828 !important; background: #fff5f5 !important; }
+  .radio-group-error { outline: 2px solid #c62828; border-radius: 8px; padding: 4px; }
+  .required-star { color: #c62828; margin-left: 3px; }
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <div class="header-banner">
+    <h1>Response Quality Evaluation: Judge Two AI Responses</h1>
+    <p>Read the prompt and both AI-generated responses, then answer a few questions to evaluate their factual accuracy. Use the Internet to verify claims.</p>
+  </div>
+
+  <!-- Instructions accordion -->
+  <div class="instructions-accordion">
+    <button type="button" class="accordion-toggle" id="accordionBtn" onclick="toggleAccordion()">
+      <span class="arrow">&#9658;</span> Task Instructions (Click to expand)
+    </button>
+    <div class="accordion-body" id="accordionBody">
+
+      <h3>Task Overview</h3>
+      <p>You will see a <strong>prompt</strong> and <strong>two AI-generated responses</strong> (Response A and Response B). For each response, you will:</p>
+      <ul>
+        <li>Pick <strong>one specific claim</strong> from the response and search the Internet to find a URL that either supports or disputes it.</li>
+        <li>Paste a short statement from that URL as evidence.</li>
+        <li>Answer two factuality questions based on your findings.</li>
+        <li>Rate the response on informativeness, relevancy to the prompt, and overall quality.</li>
+      </ul>
+      <p>Finally, judge which response is better overall.</p>
+
+      <h3>How to choose a claim</h3>
+      <p>Pick any single, concrete, checkable fact from the response — a number, a name, a date, an event, a title. Copy it exactly as it appears. Avoid vague or uncheckable claims like "he was a great player."</p>
+
+      <h3>Finding evidence</h3>
+      <p>Search Google or Wikipedia for the claim. Paste the most relevant sentence or table row you find. If the evidence <strong>confirms</strong> the claim, select "Yes, the URL supports the claim." If it <strong>contradicts</strong> it, select "No, the URL disputes the claim." Append <code>(table)</code> if your evidence comes from a table, or <code>(reason)</code> if you are writing your own reasoning.</p>
+
+      <h3>Counting errors</h3>
+      <p>After verifying your chosen claim, look at the rest of the response and estimate how many factual errors you can identify in total (including the one you looked up, if it was wrong).</p>
+
+      <h3>Special notes</h3>
+      <ul>
+        <li>We do <em>not</em> penalize time-dependent claims. If something was true at any point in time, it is not an error.</li>
+        <li>You only need to find <strong>one</strong> URL per response. You are not required to verify every single claim.</li>
+      </ul>
+
+      <h3>Example</h3>
+      <p><strong>Prompt:</strong></p>
+      <div class="ex-prompt-box">Who is Reggie Jackson, and why is he famous in baseball history?</div>
+
+      <p><strong>Responses (excerpts):</strong></p>
+      <div class="ex-responses">
+        <div class="ex-resp-box resp-a">
+          <div class="ex-resp-label a">Response A</div>
+          ...Jackson holds the record for the most home runs hit in a single season, with 52 home runs in 1977... He was a key player in the Yankees' 1977 World Series victory over the Cincinnati Reds... Two-time AL MVP: 1977 and 1980... 607 career home runs...
+        </div>
+        <div class="ex-resp-box resp-b">
+          <div class="ex-resp-label b">Response B</div>
+          ...Won three American League Most Valuable Player Awards (1977, 1978, 1979)... Hit 533 home runs during his career, which is the third-highest total in MLB history... Famous nickname: "The Golden Splinter"... Inducted into the Baseball Hall of Fame in 1993...
+        </div>
+      </div>
+
+      <p><strong>Example answers:</strong></p>
+      <div class="ex-qa-grid">
+        <div class="ex-qa-col col-a">Chosen claim: "607 career home runs"
+
+QA-1 URL:
+  https://en.wikipedia.org/wiki/Reggie_Jackson
+
+QA-2 Evidence statement:
+  "Jackson hit 563 career home runs" (563 is different from 607)
+
+QA-3 Does the URL support the claim?
+  No, the URL disputes the claim.
+
+QA-4 How many factual errors in Response A?
+  More than one
+  (also: wrong WS opponent, wrong MVP years,
+  wrong single-season HR record)
+
+QA-5 How informative is Response A?
+  Very Specific
+
+QA-6 How relevant is Response A to the prompt?
+  Very Relevant
+
+QA-7 Overall quality of Response A?
+  Dissatisfactory</div>
+        <div class="ex-qa-col col-b">Chosen claim: "Inducted into the Baseball
+Hall of Fame in 1993"
+
+QB-1 URL:
+  https://en.wikipedia.org/wiki/Reggie_Jackson
+
+QB-2 Evidence statement:
+  "Jackson was inducted into the National Baseball Hall of Fame in 1993" (1993 is correct)
+
+QB-3 Does the URL support the claim?
+  Yes, the URL supports the claim.
+
+QB-4 How many factual errors in Response B?
+  More than one
+  (also: wrong MVP count, wrong career HR
+  total, wrong nickname)
+
+QB-5 How informative is Response B?
+  Very Specific
+
+QB-6 How relevant is Response B to the prompt?
+  Very Relevant
+
+QB-7 Overall quality of Response B?
+  Dissatisfactory</div>
+      </div>
+
+      <p><strong>Comparison:</strong></p>
+      <div class="ex-compare-box">Q-Compare: Response B is slightly better</div>
+
+    </div>
+  </div>
+
+  <!-- Notice -->
+  <div class="notice-box">
+    &#9201; <strong>Estimated time:</strong> 8&ndash;12 minutes per task. You only need to look up <strong>one claim per response</strong>. Responses may be compared against others or reviewed manually &mdash; inattentive responses will be rejected.
+  </div>
+
+  <div id="taskForm">
+
+  <!-- Step 1: Prompt -->
+  <div class="step-label">Step 1 &mdash; Read the Prompt</div>
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <span class="prompt-label-badge">Prompt</span>
+      <span style="font-size:12px;color:var(--text-muted);">Read carefully before evaluating the responses below. Notice that sometimes the prompt could be ambiguous. In this case, each response could interpret the prompt freely. (e.g., What are some of her latest roles? "Her" could refer to any female here).</span>
+    </div>
+    <div class="prompt-card-body">${user_query}</div>
+  </div>
+
+  <!-- Step 2: Read responses -->
+  <div class="step-label">Step 2 &mdash; Read Both Responses</div>
+  <div class="responses-grid">
+
+    <div class="response-display-card resp-a">
+      <div class="resp-display-header a">
+        <span class="resp-badge a">Response A</span>
+        <span class="resp-display-title a">Response</span>
+      </div>
+      <div class="resp-display-body">${llm_response_a}</div>
+    </div>
+
+    <div class="response-display-card resp-b">
+      <div class="resp-display-header b">
+        <span class="resp-badge b">Response B</span>
+        <span class="resp-display-title b">Response</span>
+      </div>
+      <div class="resp-display-body">${llm_response_b}</div>
+    </div>
+
+  </div>
+
+  <!-- Step 3: Evaluate -->
+  <div class="step-label">Step 3 &mdash; Evaluate Each Response</div>
+  <div class="eval-grid">
+
+    <!-- Response A -->
+    <div class="eval-col col-a">
+      <div class="eval-col-header a">
+        <span class="resp-badge a">Response A</span>
+        <span class="resp-display-title a" style="font-size:12px;">Response &mdash; Questions</span>
+      </div>
+      <div class="eval-col-body">
+
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">QA-1</span> Pick one specific claim from Response A and paste a URL that supports or disputes it.<span class="required-star">*</span></div>
+          <div class="question-sublabel">Choose a concrete, checkable fact (a number, name, date, or event). Paste the URL below.</div>
+          <div class="claim-box-wrap" style="margin-bottom:8px;">
+            <textarea class="text-input" name="qa_claim" placeholder="Paste the claim you are checking, e.g.: 607 home runs in his career" rows="2"></textarea>
+          </div>
+          <textarea class="text-input" name="qa_url" placeholder="https://en.wikipedia.org/wiki/..." rows="1" style="min-height:36px;"></textarea>
+        </div>
+        <hr class="question-divider">
+
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">QA-2</span> Evidence statement<span class="required-star">*</span></div>
+          <div class="question-sublabel">Paste the most relevant sentence or table row from the URL. Append (table) or (reason) if applicable.</div>
+          <textarea class="text-input" name="qa_evidence" placeholder="e.g.: Jackson hit 563 career home runs (563 is different from 607)" rows="3"></textarea>
+        </div>"" 
+        <hr class="question-divider">
+
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">QA-3</span> Does the URL support the claim you picked?<span class="required-star">*</span></div>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="qa_supports" value="yes"> Yes, the URL supports the claim</label>
+            <label class="radio-option"><input type="radio" name="qa_supports" value="no"> No, the URL disputes the claim</label>
+          </div>
+        </div>
+        <hr class="question-divider">
+
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">QA-4</span> How many factual errors can you find in Response A overall?<span class="required-star">*</span></div>
+          <div class="question-sublabel">Include the claim above if it turned out to be wrong.</div>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="qa_errors" value="none"> None</label>
+            <label class="radio-option"><input type="radio" name="qa_errors" value="one"> One</label>
+            <label class="radio-option"><input type="radio" name="qa_errors" value="more"> More than one</label>
+          </div>
+        </div>
+        <hr class="question-divider">
+
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">QA-5</span> How informative is Response A? <em style="font-weight:400;color:var(--text-muted)">(regardless of factuality)</em><span class="required-star">*</span></div>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="qa_informative" value="very_specific"> Very Specific</label>
+            <label class="radio-option"><input type="radio" name="qa_informative" value="specific"> Specific</label>
+            <label class="radio-option"><input type="radio" name="qa_informative" value="general"> General</label>
+            <label class="radio-option"><input type="radio" name="qa_informative" value="very_general"> Very General</label>
+            <label class="radio-option"><input type="radio" name="qa_informative" value="almost_none"> Almost no information</label>
+          </div>
+        </div>
+        <hr class="question-divider">
+
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">QA-6</span> How relevant is Response A to the prompt?<span class="required-star">*</span></div>
+          <div class="question-sublabel">Does the response address what the prompt is actually asking?</div>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="qa_relevancy" value="very_relevant"> Very Relevant</label>
+            <label class="radio-option"><input type="radio" name="qa_relevancy" value="relevant"> Relevant</label>
+            <label class="radio-option"><input type="radio" name="qa_relevancy" value="somewhat"> Somewhat Relevant</label>
+            <label class="radio-option"><input type="radio" name="qa_relevancy" value="irrelevant"> Irrelevant</label>
+          </div>
+        </div>
+        <hr class="question-divider">
+
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">QA-7</span> Overall quality of Response A <em style="font-weight:400;color:var(--text-muted)">(factuality + informativeness + relevancy)</em><span class="required-star">*</span></div>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="qa_overall" value="excellent"> Excellent</label>
+            <label class="radio-option"><input type="radio" name="qa_overall" value="good"> Good</label>
+            <label class="radio-option"><input type="radio" name="qa_overall" value="acceptable"> Acceptable</label>
+            <label class="radio-option"><input type="radio" name="qa_overall" value="dissatisfactory"> Dissatisfactory</label>
+            <label class="radio-option"><input type="radio" name="qa_overall" value="poor"> Poor</label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Response B -->
+    <div class="eval-col col-b">
+      <div class="eval-col-header b">
+        <span class="resp-badge b">Response B</span>
+        <span class="resp-display-title b" style="font-size:12px;">Response &mdash; Questions</span>
+      </div>
+      <div class="eval-col-body">
+
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">QB-1</span> Pick one specific claim from Response B and paste a URL that supports or disputes it.<span class="required-star">*</span></div>
+          <div class="question-sublabel">Choose a concrete, checkable fact (a number, name, date, or event). Paste the URL below.</div>
+          <div class="claim-box-wrap" style="margin-bottom:8px;">
+            <textarea class="text-input" name="qb_claim" placeholder="Paste the claim you are checking, e.g.: Inducted into the Baseball Hall of Fame in 1987" rows="2"></textarea>
+          </div>
+          <textarea class="text-input" name="qb_url" placeholder="https://en.wikipedia.org/wiki/..." rows="1" style="min-height:36px;"></textarea>
+        </div>
+        <hr class="question-divider">
+
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">QB-2</span> Evidence statement<span class="required-star">*</span></div>
+          <div class="question-sublabel">Paste the most relevant sentence or table row from the URL. Append (table) or (reason) if applicable.</div>
+          <textarea class="text-input" name="qb_evidence" placeholder="e.g.: Jackson was inducted into the National Baseball Hall of Fame in 1993 (1993 is correct)" rows="3"></textarea>
+        </div> 
+        <hr class="question-divider">
+
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">QB-3</span> Does the URL support the claim you picked?<span class="required-star">*</span></div>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="qb_supports" value="yes"> Yes, the URL supports the claim</label>
+            <label class="radio-option"><input type="radio" name="qb_supports" value="no"> No, the URL disputes the claim</label>
+          </div>
+        </div>
+        <hr class="question-divider">
+
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">QB-4</span> How many factual errors can you find in Response B overall?<span class="required-star">*</span></div>
+          <div class="question-sublabel">Include the claim above if it turned out to be wrong.</div>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="qb_errors" value="none"> None</label>
+            <label class="radio-option"><input type="radio" name="qb_errors" value="one"> One</label>
+            <label class="radio-option"><input type="radio" name="qb_errors" value="more"> More than one</label>
+          </div>
+        </div>
+        <hr class="question-divider">
+
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">QB-5</span> How informative is Response B? <em style="font-weight:400;color:var(--text-muted)">(regardless of factuality)</em><span class="required-star">*</span></div>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="qb_informative" value="very_specific"> Very Specific</label>
+            <label class="radio-option"><input type="radio" name="qb_informative" value="specific"> Specific</label>
+            <label class="radio-option"><input type="radio" name="qb_informative" value="general"> General</label>
+            <label class="radio-option"><input type="radio" name="qb_informative" value="very_general"> Very General</label>
+            <label class="radio-option"><input type="radio" name="qb_informative" value="almost_none"> Almost no information</label>
+          </div>
+        </div>
+        <hr class="question-divider">
+
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">QB-6</span> How relevant is Response B to the prompt?<span class="required-star">*</span></div>
+          <div class="question-sublabel">Does the response address what the prompt is actually asking?</div>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="qb_relevancy" value="very_relevant"> Very Relevant</label>
+            <label class="radio-option"><input type="radio" name="qb_relevancy" value="relevant"> Relevant</label>
+            <label class="radio-option"><input type="radio" name="qb_relevancy" value="somewhat"> Somewhat Relevant</label>
+            <label class="radio-option"><input type="radio" name="qb_relevancy" value="irrelevant"> Irrelevant</label>
+          </div>
+        </div>
+        <hr class="question-divider">
+
+        <div class="question-block">
+          <div class="question-label"><span class="q-num">QB-7</span> Overall quality of Response B <em style="font-weight:400;color:var(--text-muted)">(factuality + informativeness + relevancy)</em><span class="required-star">*</span></div>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="qb_overall" value="excellent"> Excellent</label>
+            <label class="radio-option"><input type="radio" name="qb_overall" value="good"> Good</label>
+            <label class="radio-option"><input type="radio" name="qb_overall" value="acceptable"> Acceptable</label>
+            <label class="radio-option"><input type="radio" name="qb_overall" value="dissatisfactory"> Dissatisfactory</label>
+            <label class="radio-option"><input type="radio" name="qb_overall" value="poor"> Poor</label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Step 4: Comparison -->
+  <div class="step-label">Step 4 &mdash; Overall Comparison</div>
+  <div class="comparison-card">
+    <div class="comparison-header">Compare the Two Responses</div>
+    <div class="comparison-body">
+
+      <div class="question-block">
+        <div class="question-label"><span class="q-num">Q-Compare</span> Considering factual accuracy and overall quality, which response is better?<span class="required-star">*</span></div>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="q_compare" value="a_much_better"> Response A is much better</label>
+          <label class="radio-option"><input type="radio" name="q_compare" value="a_better"> Response A is better</label>
+          <label class="radio-option"><input type="radio" name="q_compare" value="a_slightly_better"> Response A is slightly better</label>
+          <label class="radio-option"><input type="radio" name="q_compare" value="equal"> Roughly equal</label>
+          <label class="radio-option"><input type="radio" name="q_compare" value="b_slightly_better"> Response B is slightly better</label>
+          <label class="radio-option"><input type="radio" name="q_compare" value="b_better"> Response B is better</label>
+          <label class="radio-option"><input type="radio" name="q_compare" value="b_much_better"> Response B is much better</label>
+        </div>
+      </div>
+      <hr class="question-divider">
+
+
+    </div>
+  </div>
+
+  <!-- Submit -->
+  <div class="submit-section">
+    <h3>Optional: Additional Comments</h3>
+    <textarea class="additional-comments" name="additional_comments" placeholder="Any additional comments or suggestions for the requester..."></textarea>
+    <div>
+      <button type="button" class="submit-btn" onclick="handleSubmit()">Submit Answers</button>
+      <p class="validation-msg" id="validationMsg">&#9888; Please fill in all required fields: claim + URL + evidence for each response, and answer all radio questions (QA-3 through QA-7, QB-3 through QB-7, and Q-Compare).</p>
+    </div>
+  </div>
+
+  </div>
+</div>
+
+<script>
+  function toggleAccordion() {
+    const btn  = document.getElementById('accordionBtn');
+    const body = document.getElementById('accordionBody');
+    btn.classList.toggle('open');
+    body.classList.toggle('open');
+  }
+
+  document.querySelectorAll('.radio-option input[type="radio"]').forEach(input => {
+    input.addEventListener('change', function () {
+      const group = this.closest('.radio-group');
+      group.querySelectorAll('.radio-option').forEach(opt => opt.classList.remove('selected'));
+      this.closest('.radio-option').classList.add('selected');
+      // Clear radio group error highlight when user picks an option
+      group.classList.remove('radio-group-error');
+    });
+  });
+
+  // Clear text field error highlight on input
+  document.querySelectorAll('textarea').forEach(el => {
+    el.addEventListener('input', function () {
+      if (this.value.trim()) this.classList.remove('field-error');
+    });
+  });
+
+  function handleSubmit() {
+    const container = document.getElementById('taskForm');
+
+    // Clear previous highlights
+    container.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+    container.querySelectorAll('.radio-group-error').forEach(el => el.classList.remove('radio-group-error'));
+
+    const textFields = ['qa_claim','qa_url','qa_evidence','qb_claim','qb_url','qb_evidence'];
+    const radioFields = ['qa_supports','qa_errors','qa_informative','qa_relevancy','qa_overall',
+                         'qb_supports','qb_errors','qb_informative','qb_relevancy','qb_overall','q_compare'];
+
+    let firstErrorEl = null;
+
+    // Highlight empty text fields
+    textFields.forEach(n => {
+      const el = document.querySelector('[name="' + n + '"]');
+      if (el && !el.value.trim()) {
+        el.classList.add('field-error');
+        if (!firstErrorEl) firstErrorEl = el;
+      }
+    });
+
+    // Highlight unanswered radio groups
+    radioFields.forEach(n => {
+      if (!document.querySelector('input[name="' + n + '"]:checked')) {
+        const group = document.querySelector('input[name="' + n + '"]').closest('.radio-group');
+        group.classList.add('radio-group-error');
+        if (!firstErrorEl) firstErrorEl = group;
+      }
+    });
+
+    if (firstErrorEl) {
+      document.getElementById('validationMsg').style.display = 'block';
+      firstErrorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    document.getElementById('validationMsg').style.display = 'none';
+
+    // Submit MTurk's outer form (the only <form> on the page when embedded in MTurk)
+    if (document.forms.length > 0) {
+      document.forms[0].submit();
+    } else {
+      alert('Answers submitted successfully!\n\nThank you for completing this task.');
+    }
+  }
+</script>
+</body>
+</html>

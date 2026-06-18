@@ -1,0 +1,18 @@
+.convo table {
+    width: 70vw;
+    table-layout: fixed;
+    text-align: center;
+    border-spacing: 10px;
+    margin: 16px auto;
+}
+
+.convo td {
+    padding: 8px;
+    font-size: 16px;
+    color: #334e68;
+}
+
+.convo input[type="radio"] {
+    margin: 0 auto;
+    transform: scale(1.2);
+}

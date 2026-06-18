@@ -1,0 +1,178 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+    color: #334e68;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    color: #334e68;
+    font-weight: 500;
+}
+
+.column-structure {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100vw;
+}
+
+.collapse {
+    background-color: #4a5568;
+    width: 10vw;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.collapse:hover {
+    background-color: #2d3748;
+}
+
+textarea.feedback {
+    margin: 0;
+    padding: 8px;
+    outline: none;
+    border: 2px solid #cbd5e0;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+    font-size: 16px;
+}
+
+textarea.feedback:focus {
+    border: 2px solid #3182ce;
+    box-shadow: 0 0 5px rgba(49, 130, 206, 0.5);
+}
+
+form.search-form {
+    width: 98vw;
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+}
+
+form.search-form input {
+    flex: 1;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    width: 100%;
+}
+
+form.search-form button {
+    padding: 8px 16px;
+    font-size: 16px;
+    color: white;
+    background-color: #3182ce;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form.search-form button:hover {
+    background-color: #2b6cb0;
+}
+
+form.next-step-form {
+    display: flex;
+    justify-content: center;
+    padding: 16px;
+}
+
+form.next-step-form button {
+    padding: 12px 24px;
+    font-size: 18px;
+    color: white;
+    background-color: #3182ce;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form.next-step-form button:hover {
+    background-color: #2b6cb0;
+}
+
+div.response-container {
+    height: 60vh;
+    width: 48vw;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    padding: 8px;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-y: visible;
+    line-height: 3.5;
+}
+
+div.response-container > * {
+    font-size: 20px;
+    font-family: 'Consolas', monospace;
+    word-wrap: break-word; /* Older CSS property for word wrapping */
+    overflow-wrap: break-word; /* Ensures long words break properly */
+    white-space: pre-wrap; /* Ensures the text wraps to the next line */    
+}
+
+div.column-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    height: 60vh;
+}
+
+.likert-scale table {
+    width: 50vw;
+    table-layout: fixed;
+    text-align: center;
+    border-spacing: 10px;
+    margin: 16px auto;
+}
+
+.likert-scale td {
+    padding: 8px;
+    font-size: 16px;
+    color: #334e68;
+}
+
+.likert-scale input[type="radio"] {
+    margin: 0 auto;
+    transform: scale(1.2);
+}
+
+div.custom-break {
+    height: 4vh;
+    visibility: hidden;
+}
+
+.scroll-instruction {
+    visibility: hidden; 
+    text-align: center; 
+    margin: 20px 0; 
+    font-weight: bold; 
+    color: #0066cc; 
+    font-size: 18px;
+}
+
+/* Task-specific div styling */
+#task-specific {
+    padding: 15px;
+    margin: 15px 0;
+    background-color: #f2f7ff;
+    border-left: 5px solid #3182ce;
+}
+
+#task-specific p {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1c4e91;
+    margin: 0;
+}

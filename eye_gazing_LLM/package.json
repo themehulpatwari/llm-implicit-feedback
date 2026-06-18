@@ -1,0 +1,18 @@
+{
+  "name": "anonymous-study",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.php",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "heatmap.js": "^2.0.5",
+    "webgazer": "^3.3.0"
+  }
+}

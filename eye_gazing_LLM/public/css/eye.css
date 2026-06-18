@@ -1,0 +1,28 @@
+div.kdot {
+    display: block; 
+    position: fixed; 
+    z-index: 99999999;
+    background: #0072B2; 
+    border-radius: 100%;       
+    opacity: 0.7; 
+    width: 30px; 
+    height: 30px; 
+    transform: translate(-50%, -50%);
+    transition: 0; 
+    margin: 10px 10px 10px 10px;
+}
+
+div.kdot:hover{
+    background: #E69F00;
+}
+
+#heatmapContainer {
+    z-index: 100;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+#webgazerVideoContainer {
+    display: block;
+}

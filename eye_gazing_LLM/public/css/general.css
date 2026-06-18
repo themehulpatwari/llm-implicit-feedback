@@ -1,0 +1,21 @@
+/* .header{
+    width: 99%; 
+    height: 4%; 
+    background: rgba(146, 150, 156, 0.3); 
+    padding: 5px 5px 5px 5px;
+    position: sticky;
+} */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body {
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-left: 5px;
+}

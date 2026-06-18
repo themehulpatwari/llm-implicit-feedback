@@ -1,0 +1,38 @@
+html {
+    overflow: hidden;
+}
+
+.container {
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 16px; 
+    height: 100vh;
+}
+
+div.column > * {
+    margin-bottom: 16px;
+}
+
+div.column label{
+    margin: 2px;
+}
+
+div.column textarea{
+    width: 100%; 
+    padding: 2px; 
+    border: 1px solid black;
+    resize:none;
+}
+
+div.column textarea:focus{
+    border: 2px solid black;
+}
+
+div.left-column {
+    border: 2px solid #969696; 
+    border-radius: 5px; 
+    padding: 2px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}

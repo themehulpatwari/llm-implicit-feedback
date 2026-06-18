@@ -1,0 +1,77 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+    margin: 0;
+}
+
+#login-warning {
+    margin-top: 20px; 
+    background-color: rgb(252, 160, 160);
+    /* background-color: forestgreen; */
+    display: none;
+    position: absolute;
+}
+
+#username {
+    padding: 2px; 
+    width: 200px;
+}
+
+.dropdown {
+    position: relative;
+    display: flex;
+    height: 200px;
+}
+
+.dropdown-checkboxes {
+    display: block;
+    position: absolute;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    width: 200px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1;
+}
+
+.dropdown-checkboxes label {
+    display: flex;
+    padding: 8px;
+    cursor: pointer;
+    width: 100%; 
+    box-sizing: border-box;
+}
+
+.dropdown-checkboxes label:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown-checkboxes input[type="checkbox"] {
+    margin-right: 8px;
+    height: 16px;
+    width: 16px;
+    flex-shrink: 0;
+}
+
+.instructions {
+    margin-bottom: 20px;
+    text-align: left;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.browser-warning {
+    text-align: center;
+    padding: 50px;
+    font-size: 18px;
+    max-width: 600px;
+    margin: 100px auto;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 4px;
+    color: #856404;
+}

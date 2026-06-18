@@ -1,0 +1,231 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: visible;
+    overflow-y: visible;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 5px;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+    margin-top: 60px; /* Add space for fixed navbar */
+}
+
+html, body {
+    overflow: visible;
+}
+
+.parent {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    overflow: visible;
+}
+
+.navbar {
+    width: 100vw; /* Change to viewport width */
+    margin-left: calc(-50vw + 50%); /* Center the navbar */
+    margin-right: calc(-50vw + 50%);
+    left: 0;
+    right: 0;
+    align-self: flex-start;
+    height: auto;
+    position: fixed;
+    position: -webkit-sticky;
+    top: 0;
+    background-color: #00457c;
+    color: white;
+    padding: 10px 20px;
+    z-index: 1000; /* Ensure navbar stays on top */
+}
+
+.nav-links {
+    align-items: center; 
+    background-color: #FFF5E1;
+    margin-top: 5px;
+    justify-content: left;
+    border: 1px solid #34495E;
+    position: sticky;
+    top: 0;
+    width: 100%; /* Ensure nav-links spans full width */
+}
+
+.nav-links a {
+    transition: color 0.2s ease;
+    color: rgb(0,0,255);
+    padding: 0px;
+    text-decoration: none;
+    overflow-y: visible;
+    display: inline-block;
+    margin-right: 0px;
+    margin-left: 20px;
+}
+
+.navbar .nav-links a {
+    color: blue;
+    text-decoration: none;
+    margin-right: 15px;
+}
+
+.nav-links a:hover {
+    color: red;
+}
+
+.example-container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e0e9f5;
+}
+
+.example-section {
+    margin-bottom: 50px;
+    padding: 20px;
+    background: #f8fbff;
+    border-radius: 10px;
+}
+
+.example-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    margin: 25px 0;
+}
+
+.example-item {
+    border: 1px solid #e0e9f5;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.example-item h3 {
+    color: #00457c;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.example-item.good {
+    background-color: #f0f7f0;
+    border-left: 5px solid #28a745;
+}
+
+.example-item.bad {
+    background-color: #fff5f5;
+    border-left: 5px solid #dc3545;
+}
+
+.example-image {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    margin: 15px 0;
+    border: 2px solid #e0e9f5;
+    border-radius: 8px;
+}
+
+.example-description {
+    margin-top: 15px;
+    font-size: 0.95em;
+    line-height: 1.6;
+    color: #2c3e50;
+}
+
+.example-description p {
+    margin-bottom: 8px;
+}
+
+.highlight-text {
+    background-color: #fff3cd;
+    padding: 3px 6px;
+    border-radius: 4px;
+    border: 1px solid #ffeeba;
+    color: #856404;
+}
+
+/* Additional styles for better hierarchy */
+.example-section h2 {
+    color: #00457c;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(0, 69, 124, 0.1);
+}
+
+.example-container h1 {
+    color: #00457c;
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2em;
+    font-weight: 700;
+}
+
+/* Reminders Section Styling */
+.reminders-section {
+    background: linear-gradient(to right, #f8fbff, #f0f7ff);
+    border: 2px solid #e0e9f5;
+    border-radius: 12px;
+    padding: 25px 30px;
+    margin: 40px 0;
+}
+
+.reminders-section h2 {
+    color: #00457c;
+    font-size: 1.4em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(0, 69, 124, 0.1);
+}
+
+.reminders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.reminder-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 8px 0;
+}
+
+.reminder-bullet {
+    color: #00457c;
+    font-size: 0.9em;
+}
+
+.reminder-text {
+    color: #2c3e50;
+    font-size: 1.1em;
+    line-height: 1.4;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .example-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .example-container {
+        margin: 15px;
+        padding: 15px;
+    }
+
+    .reminders-section {
+        padding: 20px;
+        margin: 30px 0;
+    }
+    
+    .reminder-text {
+        font-size: 1em;
+    }
+}
