@@ -35,8 +35,3 @@ Research code and data for **IFLLM**, a dataset of 1,336 multi-turn LLM conversa
 
 - **[dpo_eye_gazing/](dpo_eye_gazing/)** — LLM alignment via rDPO + NLL on eight base models (GPT2-XL, Pythia 2.8B, OLMo2 1B, Llama3.2 3B, Qwen2.5 1.5B/3B, Qwen3 1.7B/4B). Consumes preference predictions from `feature_creator/` or `llm_reward/` as the DPO label source and runs GPT-4.1-mini as judge for evaluation.
 
-## Citation
-
-Haw-Shiuan Chang, Jeffrey Gomez, Mehul Patwari, Aryan Sajith, Hamed Zamani. 2026.
-*Your Mouse and Eyes Secretly Leak Your Preference: LLM Alignment using Implicit Feedback from Users*.
-In Proceedings of EMNLP 2026.
