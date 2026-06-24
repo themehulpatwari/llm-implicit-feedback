@@ -213,7 +213,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     ];
 
     // $models = [1, 2, 3, 4];
-    $models = ['gpt-4o-mini', 'claude-sonnet-4-5-20250929', 'meta-llama/Llama-3.3-70B-Instruct-Turbo', 'deepseek-ai/DeepSeek-V3'];
+    $models = ['gpt-4o-mini', 'claude-sonnet-4-5-20250929', 'meta-llama/Llama-3.3-70B-Instruct-Turbo', 'deepseek-ai/DeepSeek-V3.1'];
     // $models = ['gpt-4o-mini', 'claude-sonnet-4-5-20250929'];
     // $models = ['claude-sonnet-4-5-20250929'];
 
